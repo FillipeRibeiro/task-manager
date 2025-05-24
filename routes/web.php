@@ -1,38 +1,53 @@
 <?php
 
 use App\Http\Web\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Web\Controllers\ProjectController;
+use App\Http\Web\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => true, //Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return Inertia::render('Welcome');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])
+    ->prefix('profile')
+    ->group(function () {
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth', 'verified'])
+    ->prefix('projects')
+    ->group(function () {
+
+    Route::get('/', [ProjectController::class, 'list'])->name('projects.list');
+
+    Route::get('/create', [ProjectController::class, 'create']);
+    Route::post('/', [ProjectController::class, 'store']);
+    
+    Route::get('/{project}', [ProjectController::class, 'edit']);
+    Route::put('/{project}', [ProjectController::class, 'update']);
+
+    Route::delete('/{project}', [ProjectController::class, 'delete'])->name('projects.delete');
+});
+
+Route::middleware(['auth', 'verified'])
+    ->prefix('tasks')
+    ->group(function () {
+
+    Route::post('/', [TaskController::class, 'store']);
+
+    Route::get('/create/{project}', [TaskController::class, 'create']);
+    Route::get('list/{project}', [TaskController::class, 'list'])->name('tasks.list');
+    Route::get('/edit/{task}', [TaskController::class, 'edit']);
+
+    Route::put('/{task}', [TaskController::class, 'update']);
+    Route::put('/status/{task}', [TaskController::class, 'updateStatus']);
+
+    Route::delete('/{task}', [TaskController::class, 'delete'])->name('tasks.delete');
 });
 
 require __DIR__.'/auth.php';
