@@ -1,0 +1,743 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Laravel",
+        "description": "API Documentation",
+        "contact": {
+            "email": "fillipe.ribeiro.santos@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost",
+            "description": "Server"
+        }
+    ],
+    "paths": {
+        "/api/profile": {
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update authenticated user's profile",
+                "operationId": "b17ce5295a2b8d7e968e15fa2638a06d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProfileUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Delete authenticated user's account",
+                "operationId": "35a8629c1d51ddf9668ae0ba47bf1066",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User account deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User Deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    }
+                }
+            }
+        },
+        "/api/projects": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "List all projects",
+                "operationId": "db97a5363403eb3dff02035023be39bd",
+                "responses": {
+                    "200": {
+                        "description": "List of projects",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProjectResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Create a new project",
+                "operationId": "c3055c0b7748156709d1e207a886f0a1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreProjectRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Project created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProjectResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/projects/{id}": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get a single project",
+                "operationId": "2813dbd2b5ce506ea6ccaaf44fb2056b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Project found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProjectResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Project not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Update an existing project",
+                "operationId": "ccad6b1be8f21a4d120dcc104f707e43",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProjectRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Project updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProjectResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Delete a project",
+                "operationId": "618b5b5f2690df9bba5f76d87e5d06ff",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Project deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Project Deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "List tasks",
+                "operationId": "680ea132ee56964b446eb533f731d3e4",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "searchTitle",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "searchPriority",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "searchStatus",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of tasks",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TaskResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Create a new task",
+                "operationId": "4103321c245d2ab2cc2f759da6d77f34",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreTaskRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Task created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TaskResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks/{id}": {
+            "put": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Update an existing task",
+                "operationId": "4fe58d588f29f3f37b789ff09c0fd76b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTaskRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TaskResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Delete a task",
+                "operationId": "076b4a2b0ac44e2e77d63373d5a9458b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Task Deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks/{id}/status": {
+            "put": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Update task status",
+                "operationId": "8a73c7ed9bc6ee076ca4cea8a7b9cfdf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTaskStatusRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task status updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TaskResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ProfileUpdateRequest": {
+                "title": "Profile Update Request",
+                "required": [
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Leonard Green"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "leonard@example.com"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreProjectRequest": {
+                "title": "Store Project Request",
+                "description": "Data to create project",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Marketing project"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Social media",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateProjectRequest": {
+                "title": "Update Project Request",
+                "description": "Update project data",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Project updated"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Description updated",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreTaskRequest": {
+                "title": "Store Task Request",
+                "description": "Create new task",
+                "required": [
+                    "project_id",
+                    "title",
+                    "due_date",
+                    "priority"
+                ],
+                "properties": {
+                    "project_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 80,
+                        "example": "Set goal"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 240,
+                        "example": "Discuss goals",
+                        "nullable": true
+                    },
+                    "due_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-06-01"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                        ],
+                        "example": "high"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTaskRequest": {
+                "title": "Update Task Request",
+                "description": "Data to update task",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "maxLength": 80,
+                        "example": "New task title"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 240,
+                        "example": "Description updated",
+                        "nullable": true
+                    },
+                    "due_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-07-15",
+                        "nullable": true
+                    },
+                    "priority": {
+                        "type": "string",
+                        "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                        ],
+                        "example": "medium",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTaskStatusRequest": {
+                "title": "Update Task Status Request",
+                "description": "Update task status",
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "in_progress",
+                            "completed"
+                        ],
+                        "example": "in_progress"
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectResource": {
+                "title": "Project Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "My Project"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Project description..."
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "05-23-2025"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "05-23-2025"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "TaskResource": {
+                "title": "Task Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "project_id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "due_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "priority": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UserResource": {
+                "title": "User Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "05-23-2025"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "05-23-2025"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Profile",
+            "description": "Endpoints for managing the authenticated user's profile"
+        },
+        {
+            "name": "Projects",
+            "description": "API Endpoints for managing projects"
+        },
+        {
+            "name": "Tasks",
+            "description": "API Endpoints for managing tasks"
+        }
+    ]
+}
