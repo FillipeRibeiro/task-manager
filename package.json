@@ -21,5 +21,8 @@
         "typescript": "^5.8.3",
         "vite": "^5.0.0",
         "vue": "^3.4.0"
+    },
+    "dependencies": {
+        "lucide-vue-next": "^0.511.0"
     }
 }
