@@ -41,6 +41,7 @@ class ProjectController extends Controller
     public function list(): AnonymousResourceCollection
     {
         $projects = Project::query()
+            ->with('user')
             ->whereNull('deleted_at')
             ->paginate(15);
 
@@ -67,6 +68,7 @@ class ProjectController extends Controller
     public function show(int $project): ProjectResource
     {
         $project = Project::query()
+            ->with('user')
             ->where('id', $project)
             ->whereNull('deleted_at')
             ->firstOrFail();

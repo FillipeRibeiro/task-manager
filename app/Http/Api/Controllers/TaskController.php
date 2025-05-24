@@ -44,6 +44,7 @@ class TaskController extends Controller
     public function list(Request $request): AnonymousResourceCollection
     {
         $tasks = Task::query()
+            ->with(['user', 'project'])
             ->where('project_id', $request->project)
             ->where('user_id', auth()->id())
             ->whereNull('deleted_at')
@@ -59,6 +60,45 @@ class TaskController extends Controller
             ->paginate(20);
 
         return TaskResource::collection($tasks);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/tasks/{task}",
+     *     summary="Show specific task",
+     *     description="Show specific task by ID.",
+     *     operationId="getTaskById",
+     *     tags={"Tasks"},
+     *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="task",
+     *         in="path",
+     *         required=true,
+     *         description="task id",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         @OA\JsonContent(ref="#/components/schemas/TaskResource")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not found"
+     *     )
+     * )
+     */
+    public function show(int $task): TaskResource
+    {
+        $task = Task::query()
+            ->with(['user', 'project'])
+            ->where('id', $task)
+            ->whereNull('deleted_at')
+            ->firstOrFail();
+
+        return new TaskResource($task);
     }
 
     /**
