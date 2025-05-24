@@ -1,50 +1,74 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Api\Controllers;
 
 use App\Http\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use Inertia\Response;
 
+/**
+ * @OA\Tag(
+ *     name="Profile",
+ *     description="Endpoints for managing the authenticated user's profile"
+ * )
+ */
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * @OA\Put(
+     *     path="/api/profile",
+     *     summary="Update authenticated user's profile",
+     *     tags={"Profile"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/ProfileUpdateRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Profile updated",
+     *         @OA\JsonContent(ref="#/components/schemas/UserResource")
+     *     )
+     * )
      */
-    public function edit(Request $request): Response
+    public function update(ProfileUpdateRequest $request): UserResource
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
-        ]);
+        $user = User::where('id', auth()->id())
+            ->update($request->validated());
+
+        return new UserResource($user);
     }
 
     /**
-     * Update the user's profile information.
+     * @OA\Delete(
+     *     path="/api/profile",
+     *     summary="Delete authenticated user's account",
+     *     tags={"Profile"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"password"},
+     *             @OA\Property(property="password", type="string", example="secret123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User account deleted",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User Deleted")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation failed"
+     *     )
+     * )
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): JsonResponse
     {
         $request->validate([
             'password' => ['required', 'current_password'],
@@ -59,6 +83,8 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return response()->json([
+            'message' => 'User Deleted'
+        ], Response::HTTP_OK);
     }
 }
