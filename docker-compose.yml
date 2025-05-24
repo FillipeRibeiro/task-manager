@@ -1,26 +1,20 @@
 services:
-    laravel.test:
+    server:
         build:
             context: './vendor/laravel/sail/runtimes/8.2'
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: 'sail-8.2/app'
+        image: 'app_php:8.2'
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-            IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - app_network
         depends_on:
             - pgsql
             - redis
@@ -34,10 +28,9 @@ services:
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
         volumes:
-            - 'sail-pgsql:/var/lib/postgresql/data'
-            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+            - 'data-pgsql:/var/lib/postgresql/data'
         networks:
-            - sail
+            - app_network
         healthcheck:
             test:
                 - CMD
@@ -54,9 +47,9 @@ services:
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sail-redis:/data'
+            - 'data-redis:/data'
         networks:
-            - sail
+            - app_network
         healthcheck:
             test:
                 - CMD
@@ -65,10 +58,10 @@ services:
             retries: 3
             timeout: 5s
 networks:
-    sail:
+    app_network:
         driver: bridge
 volumes:
-    sail-pgsql:
+    data-pgsql:
         driver: local
-    sail-redis:
+    data-redis:
         driver: local
