@@ -81,6 +81,7 @@ class TaskController extends Controller
      *
      *     @OA\Response(
      *         response=200,
+     *         description="Show a especific task",
      *         @OA\JsonContent(ref="#/components/schemas/TaskResource")
      *     ),
      *

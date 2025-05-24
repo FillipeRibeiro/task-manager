@@ -1,11 +1,20 @@
 <?php
 
+use App\Http\Api\Controllers\AuthController;
 use App\Http\Api\Controllers\ProfileController;
 use App\Http\Api\Controllers\ProjectController;
 use App\Http\Api\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-// adicionar rotas de autenticação com sanctum
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::middleware('auth:sanctum')
+    ->group(function () {
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
+});
 
 Route::middleware('auth:sanctum')
     ->prefix('profile')
@@ -19,7 +28,7 @@ Route::middleware('auth:sanctum')
     ->prefix('projects')
     ->group(function () {
 
-    Route::get('/', [ProjectController::class, 'list'])->name('projects.list');
+    Route::get('/', [ProjectController::class, 'list']);
     Route::get('/show/{project}', [ProjectController::class, 'show']);
 
     Route::post('/', [ProjectController::class, 'store']);
