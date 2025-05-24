@@ -7,60 +7,51 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## About the Application
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This application showcases a task manager based on projects (boards), focusing on clear and efficient organization.
+Tasks are grouped by project to simplify separation and tracking.
+A Kanban-style board is used to provide an intuitive view of each task’s current status.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Project Structure
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The application was built as a monolith, with the frontend developed using Vue 3, Tailwind CSS, and Inertia.js. The backend is powered by Laravel with a PostgreSQL database.
+The development environment is containerized with Docker through Laravel Sail, including services for the server, database, and cache (Redis planned but not yet implemented). Vite is used on the frontend to compile TypeScript and Vue files.
 
-## Learning Laravel
+The architecture follows a simple and idiomatic Laravel structure, with well-defined layers: routes → Form Requests (validation) → Controllers → Actions for business logic.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Setup
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+To setup the enviroment is necessary to have installed a few tools:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+ - Composer (v2.7.*)
+ - PHP (v8.2.*)
+ - Node (v18.*)
+ - NPM (v10.*)
+ - Docker
 
-## Laravel Sponsors
+First step is to install the packages running the command `composer install`.
+Then you can run `npm install` to insatall all Javascript dependencies.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Create the `.env` file on the root of the project and copy the intire content of `.env.example`.
 
-### Premium Partners
+Next step is to run `sail up` or `sail up -d` to run detached.
+In other terminal if you choose the non detached option, you must run `npm run dev` to build Vite and compile the Javascript files.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+For the last just run the command `sail artisan migrate` to run the migrations on the container.
 
-## Contributing
+## API Documentation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This application has API support, check the endpoints on the file `routes/api.php`.
 
-## Code of Conduct
+The API documentation is accesable by the url `http://localhost/api/documentation`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## To do
 
-## Security Vulnerabilities
+A few ideas of what can be implemented in the future.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- A validation to limit the amout of task for each project.
+    To keep each project (board) simple and clear and improve performance.
+- Implement cache with redis also to improve performance
+- Add feature tests for API
+- Add pinia to improve management state
