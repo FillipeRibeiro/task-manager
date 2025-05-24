@@ -33,12 +33,11 @@ Route::middleware('auth:sanctum')
 
     Route::post('/', [TaskController::class, 'store']);
 
-    Route::get('/create/{project}', [TaskController::class, 'create']);
-    Route::get('list/{project}', [TaskController::class, 'list'])->name('tasks.list');
-    Route::get('/edit/{task}', [TaskController::class, 'edit']);
+    Route::get('/show/{task}', [TaskController::class, 'show']);
+    Route::get('list/{project}', [TaskController::class, 'list']);
 
     Route::put('/{task}', [TaskController::class, 'update']);
     Route::put('/status/{task}', [TaskController::class, 'updateStatus']);
 
-    Route::delete('/{task}', [TaskController::class, 'delete'])->name('tasks.delete');
+    Route::delete('/{task}', [TaskController::class, 'delete']);
 });
